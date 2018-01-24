@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Руслан Бреев](https://up.htmlacademy.ru/javascript/12/user/488939).
-* Наставник: `Неизвестно`.
+* Наставник: [Денис Верхотуров](https://htmlacademy.ru/profile/id56756).
 
 ---
 
