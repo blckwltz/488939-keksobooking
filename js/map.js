@@ -33,7 +33,7 @@ var type = [
   'bungalo'
 ];
 var rooms = generateRandomNumber(1, 5);
-var guests = Math.floor(Math.random() * 10);
+var guests = generateRandomNumber(1, 2);
 var checkin = [
   '12:00',
   '13:00',
@@ -48,7 +48,7 @@ var features = [
   'conditioner'
 ];
 
-features.length = generateRandomNumber(1, 6);
+features.length = generateRandomNumber(0, 6);
 
 var photos = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
@@ -65,7 +65,7 @@ var adverts = [
       'avatar': avatar[0]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[0],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -87,7 +87,7 @@ var adverts = [
       'avatar': avatar[1]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[1],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -109,7 +109,7 @@ var adverts = [
       'avatar': avatar[2]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[2],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -131,7 +131,7 @@ var adverts = [
       'avatar': avatar[3]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[3],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -153,7 +153,7 @@ var adverts = [
       'avatar': avatar[4]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[4],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -175,7 +175,7 @@ var adverts = [
       'avatar': avatar[5]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[5],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -197,7 +197,7 @@ var adverts = [
       'avatar': avatar[6]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[6],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -219,7 +219,7 @@ var adverts = [
       'avatar': avatar[7]
     },
     'offer': {
-      'title': title[generateRandomNumber(0, 7)],
+      'title': title[7],
       'address': address,
       'price': price,
       'type': type[generateRandomNumber(0, 2)],
@@ -266,11 +266,18 @@ for (var i = 0; i < adverts.length; i++) {
 
 var advertTemplate = document.querySelector('template').content.querySelector('.map__card');
 
-var renderAdvert = function () {
+var generateAdvert = function () {
   var advertElement = advertTemplate.cloneNode(true);
 
+  advertElement.querySelector('.popup__avatar').src = adverts[0].author.avatar;
+
   advertElement.querySelector('h3').textContent = adverts[0].offer.title;
-  advertElement.querySelector('.popup__price').textContent = adverts[0].offer.price + '&#x20bd;' + '/ночь';
+
+  advertElement.querySelector('.popup__price').textContent = adverts[0].offer.price + ' \u20BD/ночь';
+
+  advertElement.querySelector('.popup__pictures li img').src = adverts[0].offer.photos[2];
+  advertElement.querySelector('.popup__pictures li img').style.width = 100 + 'px';
+
   if (adverts[0].offer.type === 'flat') {
     advertElement.querySelector('h4').textContent = 'Квартира';
   } if (adverts[0].offer.type === 'bungalo') {
@@ -279,18 +286,29 @@ var renderAdvert = function () {
     advertElement.querySelector('h4').textContent = 'Дом';
   }
 
+  if (adverts[0].offer.features[0] !== 'wifi') {
+    advertElement.querySelector('.popup__features').children[0].classList.remove('feature');
+  } if (adverts[0].offer.features[1] !== 'dishwasher') {
+    advertElement.querySelector('.popup__features').children[1].classList.remove('feature');
+  } if (adverts[0].offer.features[2] !== 'parking') {
+    advertElement.querySelector('.popup__features').children[2].classList.remove('feature');
+  } if (adverts[0].offer.features[3] !== 'washer') {
+    advertElement.querySelector('.popup__features').children[3].classList.remove('feature');
+  } if (adverts[0].offer.features[4] !== 'elevator') {
+    advertElement.querySelector('.popup__features').children[4].classList.remove('feature');
+  } if (adverts[0].offer.features[5] !== 'conditioner') {
+    advertElement.querySelector('.popup__features').children[5].classList.remove('feature');
+  }
+
   var p = advertElement.querySelectorAll('p');
   p[0].children[0].textContent = adverts[0].offer.address;
   p[2].textContent = adverts[0].offer.rooms + ' комнаты для ' + adverts[0].offer.guests + ' гостей';
-  p[3].textContent = 'Заезд после ' + adverts[0].offer.checkin + ',' + ' выезд до ' + adverts[0].offer.checkout;
+  p[3].textContent = 'Заезд после ' + adverts[0].offer.checkin + ', выезд до' +
+    ' ' + adverts[0].offer.checkout;
   p[4].textContent = adverts[0].offer.description;
 
-  advertElement.querySelector('.popup__features').children[0].textContent = adverts[0].offer.features[0];
-  advertElement.querySelector('.popup__pictures li img').src = adverts[0].offer.photos[0];
-  advertElement.querySelector('.popup__avatar').src = adverts[0].author.avatar;
 
   return advertElement;
 };
 
-map.appendChild(renderAdvert());
-
+map.appendChild(generateAdvert());
