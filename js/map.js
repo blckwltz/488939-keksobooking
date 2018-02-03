@@ -4,18 +4,21 @@ var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
-var avatar = [
-  'img/avatars/user01.png',
-  'img/avatars/user02.png',
-  'img/avatars/user03.png',
-  'img/avatars/user04.png',
-  'img/avatars/user05.png',
-  'img/avatars/user06.png',
-  'img/avatars/user07.png',
-  'img/avatars/user08.png'
-];
+var getRandomElement = function (array) {
+  return array[Math.floor(Math.random() * array.length)];
+};
 
-var title = [
+var compareRandom = function () {
+  return Math.random() - 0.5;
+};
+
+var avatars = [];
+
+for (var i = 1; i <= 8; i++) {
+  avatars[i - 1] = 'img/avatars/user0' + i + '.png';
+}
+
+var titles = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
   'Огромный прекрасный дворец',
@@ -25,16 +28,20 @@ var title = [
   'Уютное бунгало далеко от моря',
   'Неуютное бунгало по колено в воде'
 ];
-var address = location.x + ', ' + location.y;
+var locations = {
+  'x': generateRandomNumber(300, 900),
+  'y': generateRandomNumber(150, 500)
+};
+var address = locations.x + ', ' + locations.y;
 var price = generateRandomNumber(1000, 1000000);
 var type = [
   'flat',
   'house',
   'bungalo'
 ];
-var rooms = generateRandomNumber(1, 5);
-var guests = generateRandomNumber(1, 2);
-var checkin = [
+var roomsNumber = generateRandomNumber(1, 5);
+var guestsNumber = generateRandomNumber(1, 7);
+var times = [
   '12:00',
   '13:00',
   '14:00'
@@ -56,213 +63,64 @@ var photos = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var x = generateRandomNumber(300, 900);
-var y = generateRandomNumber(150, 500);
+var sortedPhotos = photos.sort(compareRandom);
 
-var adverts = [
-  {
+var adverts = [];
+
+for (var j = 1; j <= avatars.length; j++) {
+  adverts[j - 1] = {
     'author': {
-      'avatar': avatar[0]
+      'avatar': avatars[j - 1]
     },
     'offer': {
-      'title': title[0],
+      'title': titles[j - 1],
       'address': address,
       'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
+      'type': getRandomElement(type),
+      'rooms': roomsNumber,
+      'guests': guestsNumber,
+      'checkin': getRandomElement(times),
+      'checkout': getRandomElement(times),
       'features': features,
       'description': '',
-      'photos': photos
+      'photos': sortedPhotos
     },
     'location': {
-      'x': x,
-      'y': y
+      'x': generateRandomNumber(300, 900),
+      'y': generateRandomNumber(150, 500)
     }
-  },
-  {
-    'author': {
-      'avatar': avatar[1]
-    },
-    'offer': {
-      'title': title[1],
-      'address': address,
-      'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
-      'features': features,
-      'description': '',
-      'photos': photos
-    },
-    'location': {
-      'x': x,
-      'y': y
-    }
-  },
-  {
-    'author': {
-      'avatar': avatar[2]
-    },
-    'offer': {
-      'title': title[2],
-      'address': address,
-      'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
-      'features': features,
-      'description': '',
-      'photos': photos
-    },
-    'location': {
-      'x': x,
-      'y': y
-    }
-  },
-  {
-    'author': {
-      'avatar': avatar[3]
-    },
-    'offer': {
-      'title': title[3],
-      'address': address,
-      'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
-      'features': features,
-      'description': '',
-      'photos': photos
-    },
-    'location': {
-      'x': x,
-      'y': y
-    }
-  },
-  {
-    'author': {
-      'avatar': avatar[4]
-    },
-    'offer': {
-      'title': title[4],
-      'address': address,
-      'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
-      'features': features,
-      'description': '',
-      'photos': photos
-    },
-    'location': {
-      'x': x,
-      'y': y
-    }
-  },
-  {
-    'author': {
-      'avatar': avatar[5]
-    },
-    'offer': {
-      'title': title[5],
-      'address': address,
-      'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
-      'features': features,
-      'description': '',
-      'photos': photos
-    },
-    'location': {
-      'x': x,
-      'y': y
-    }
-  },
-  {
-    'author': {
-      'avatar': avatar[6]
-    },
-    'offer': {
-      'title': title[6],
-      'address': address,
-      'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
-      'features': features,
-      'description': '',
-      'photos': photos
-    },
-    'location': {
-      'x': x,
-      'y': y
-    }
-  },
-  {
-    'author': {
-      'avatar': avatar[7]
-    },
-    'offer': {
-      'title': title[7],
-      'address': address,
-      'price': price,
-      'type': type[generateRandomNumber(0, 2)],
-      'rooms': rooms,
-      'guests': guests,
-      'checkin': checkin[generateRandomNumber(0, 2)],
-      'checkout': checkin[generateRandomNumber(0, 2)],
-      'features': features,
-      'description': '',
-      'photos': photos
-    },
-    'location': {
-      'x': x,
-      'y': y
-    }
-  }
-];
+  };
+}
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
-var fragment = document.createDocumentFragment();
-
-var pins = document.querySelector('.map__pins');
-
-for (var i = 0; i < adverts.length; i++) {
+var renderPin = function (advert) {
   var pin = document.createElement('button');
   pin.classList.add('map__pin');
-  pin.style.left = adverts[i].location.x + 70 + 'px';
-  pin.style.top = adverts[i].location.y + 50 + 'px';
+  pin.style.left = advert.location.x + 70 + 'px';
+  pin.style.top = advert.location.y + 50 + 'px';
 
   var image = document.createElement('img');
-  image.src = adverts[i].author.avatar;
+  image.src = advert.author.avatar;
   image.width = 40;
   image.height = 40;
   image.draggable = false;
 
   pin.appendChild(image);
 
-  fragment.appendChild(pin);
+  return pin;
+};
 
-  pins.appendChild(fragment);
+var fragment = document.createDocumentFragment();
+
+for (var m = 0; m < adverts.length; m++) {
+  fragment.appendChild(renderPin(adverts[m]));
 }
+
+var pins = document.querySelector('.map__pins');
+
+pins.appendChild(fragment);
 
 var advertTemplate = document.querySelector('template').content.querySelector('.map__card');
 
@@ -275,7 +133,7 @@ var generateAdvert = function () {
 
   advertElement.querySelector('.popup__price').textContent = adverts[0].offer.price + ' \u20BD/ночь';
 
-  advertElement.querySelector('.popup__pictures li img').src = adverts[0].offer.photos[2];
+  advertElement.querySelector('.popup__pictures li img').src = adverts[0].offer.photos[0];
   advertElement.querySelector('.popup__pictures li img').style.width = 100 + 'px';
 
   if (adverts[0].offer.type === 'flat') {
