@@ -34,6 +34,97 @@ var randomSeed = function () {
   return Math.random() - 0.5;
 };
 
+var noticeForm = document.querySelector('.notice__form');
+
+noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
+
+var noticeFormTitle = noticeForm.querySelector('#title');
+
+noticeFormTitle.setAttribute('required', 'required');
+
+noticeFormTitle.setAttribute('minlength', 30);
+
+noticeFormTitle.setAttribute('maxlength', 100);
+
+var noticeFormAddress = noticeForm.querySelector('#address');
+
+noticeFormAddress.setAttribute('disabled', 'disabled');
+
+var noticeFormPrice = noticeForm.querySelector('#price');
+
+noticeFormPrice.setAttribute('required', 'required');
+
+noticeFormPrice.setAttribute('max', 1000000);
+
+var noticeFormType = noticeForm.querySelector('#type');
+
+if (noticeFormType.value === 'flat') {
+  noticeFormPrice.setAttribute('min', 1000);
+}
+
+var onTypeChange = function () {
+  if (noticeFormType.value === 'bungalo') {
+    noticeFormPrice.setAttribute('min', 0);
+  } if (noticeFormType.value === 'flat') {
+    noticeFormPrice.setAttribute('min', 1000);
+  } if (noticeFormType.value === 'house') {
+    noticeFormPrice.setAttribute('min', 5000);
+  } if (noticeFormType.value === 'palace') {
+    noticeFormPrice.setAttribute('min', 10000);
+  }
+};
+
+noticeFormType.addEventListener('input', function () {
+  onTypeChange();
+});
+
+var noticeFormTimeIn = noticeForm.querySelector('#timein');
+
+var noticeFormTimeOut = noticeForm.querySelector('#timeout');
+
+var onTimeChange = function (element1, element2) {
+  if (element1.value === '12:00') {
+    element2.value = '12:00';
+  } if (element1.value === '13:00') {
+    element2.value = '13:00';
+  } if (element1.value === '14:00') {
+    element2.value = '14:00';
+  }
+};
+
+noticeFormTimeIn.addEventListener('input', function () {
+  onTimeChange(noticeFormTimeIn, noticeFormTimeOut);
+});
+
+noticeFormTimeOut.addEventListener('input', function () {
+  onTimeChange(noticeFormTimeOut, noticeFormTimeIn);
+});
+
+var noticeFormRoomNumber = noticeForm.querySelector('#room_number');
+
+var noticeFormCapacity = noticeForm.querySelector('#capacity');
+
+// Работает не совсем так, как хотелось бы
+
+noticeFormCapacity.addEventListener('input', function () {
+  if (noticeFormRoomNumber.value === '1') {
+    if (noticeFormCapacity.value === '2' || noticeFormCapacity.value === '3') {
+      noticeFormCapacity.setCustomValidity('Количество ностей не должно' +
+        ' превышать 1');
+    }
+    if (noticeFormRoomNumber.value === '2' && noticeFormCapacity.value === '3') {
+      noticeFormCapacity.setCustomValidity('Количество ностей не должно' +
+        ' превышать 2');
+    }
+    if (noticeFormRoomNumber.value === '100') {
+      if (noticeFormCapacity.value === '1' || noticeFormCapacity.value === '2' || noticeFormCapacity.value === '3') {
+        noticeFormCapacity.setCustomValidity('Это количество комнат не для' +
+          ' гостей');
+      }
+    }
+  }
+});
+
 var titles = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
