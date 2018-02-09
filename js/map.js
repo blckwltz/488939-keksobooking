@@ -1,6 +1,18 @@
 'use strict';
 
+// var ESC_KEYCODE = 27;
+
 var ADVERTS_NUMBER = 8;
+
+var MAIN_PIN_POSITION = {
+  x: 600,
+  y: 375
+};
+
+var POSITION_OFFSET = {
+  x: 32,
+  y: 87
+};
 
 var PRICE_RANGE = {
   min: 1000,
@@ -27,12 +39,55 @@ var getRandomNumber = function (min, max) {
 };
 
 var getRandomElement = function (array) {
-  return array[Math.floor(Math.random() * array.length)];
+  return array[getRandomNumber(0, array.length)];
 };
 
 var randomSeed = function () {
   return Math.random() - 0.5;
 };
+
+var map = document.querySelector('.map');
+
+var noticeForm = document.querySelector('.notice__form');
+
+var mapPinMain = map.querySelector('.map__pin--main');
+
+mapPinMain.addEventListener('mouseup', function () {
+  toActiveState();
+});
+
+var toActiveState = function () {
+  map.classList.remove('map--faded');
+  noticeForm.classList.remove('notice__form--disabled');
+  for (var m = 0; m < housingFilters.length; m++) {
+    housingFilters[m].removeAttribute('disabled');
+  }
+  for (var n = 0; n < noticeFilters.length; n++) {
+    noticeFilters[n].removeAttribute('disabled');
+  }
+  for (var r = 0; r < mapPins.length; r++) {
+    mapPins[r].classList.remove('hidden');
+  }
+  noticeAddress.setAttribute('value', (MAIN_PIN_POSITION.x + POSITION_OFFSET.x) + ', ' + (MAIN_PIN_POSITION.y + POSITION_OFFSET.y));
+};
+
+var housingFilters = map.querySelectorAll('[id|="housing"]');
+
+for (var i = 0; i < housingFilters.length; i++) {
+  housingFilters[i].setAttribute('disabled', 'disabled');
+}
+
+var notice = document.querySelector('.notice');
+
+var noticeAddress = notice.querySelector('#address');
+
+noticeAddress.setAttribute('value', MAIN_PIN_POSITION.x + ', ' + MAIN_PIN_POSITION.y);
+
+var noticeFilters = notice.querySelectorAll('fieldset');
+
+for (var j = 0; j < noticeFilters.length; j++) {
+  noticeFilters[j].setAttribute('disabled', 'disabled');
+}
 
 var titles = [
   'Большая уютная квартира',
@@ -78,43 +133,41 @@ var sortedPhotos = photos.sort(randomSeed);
 
 var adverts = [];
 
-for (var i = 1; i <= ADVERTS_NUMBER; i++) {
+for (var k = 0; k < ADVERTS_NUMBER; k++) {
   var point = {
-    'x': getRandomNumber(MAP_AREA.x.min, MAP_AREA.x.max),
-    'y': getRandomNumber(MAP_AREA.y.min, MAP_AREA.y.max)
+    x: getRandomNumber(MAP_AREA.x.min, MAP_AREA.x.max),
+    y: getRandomNumber(MAP_AREA.y.min, MAP_AREA.y.max)
   };
   adverts.push({
-    'author': {
-      'avatar': 'img/avatars/user0' + i + '.png'
+    author: {
+      avatar: 'img/avatars/user0' + (k + 1) + '.png'
     },
-    'offer': {
-      'title': titles[i - 1],
-      'address': point.x + ', ' + point.y,
-      'price': getRandomNumber(PRICE_RANGE.min, PRICE_RANGE.max),
-      'type': getRandomElement(type),
-      'rooms': getRandomNumber(ROOMS_NUMBER.min, ROOMS_NUMBER.max),
-      'guests': getRandomNumber(GUESTS_NUMBER.min, GUESTS_NUMBER.max),
-      'checkin': getRandomElement(times),
-      'checkout': getRandomElement(times),
-      'features': features,
-      'description': '',
-      'photos': sortedPhotos
+    offer: {
+      title: titles[k],
+      address: point.x + ', ' + point.y,
+      price: getRandomNumber(PRICE_RANGE.min, PRICE_RANGE.max),
+      type: getRandomElement(type),
+      rooms: getRandomNumber(ROOMS_NUMBER.min, ROOMS_NUMBER.max),
+      guests: getRandomNumber(GUESTS_NUMBER.min, GUESTS_NUMBER.max),
+      checkin: getRandomElement(times),
+      checkout: getRandomElement(times),
+      features: features,
+      description: '',
+      photos: sortedPhotos
     },
-    'location': {
-      'x': point.x,
-      'y': point.y
+    location: {
+      x: point.x,
+      y: point.y
     }
   });
 }
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 var renderPin = function (advert) {
   var pin = document.createElement('button');
   pin.classList.add('map__pin');
-  pin.style.left = advert.location.x + 70 + 'px';
-  pin.style.top = advert.location.y + 50 + 'px';
+  pin.classList.add('hidden');
+  pin.style.left = advert.location.x + POSITION_OFFSET.x + 'px';
+  pin.style.top = advert.location.y + POSITION_OFFSET.y + 'px';
 
   var image = document.createElement('img');
   image.src = advert.author.avatar;
@@ -129,13 +182,15 @@ var renderPin = function (advert) {
 
 var fragment = document.createDocumentFragment();
 
-for (var j = 0; j < adverts.length; j++) {
-  fragment.appendChild(renderPin(adverts[j]));
+for (var l = 0; l < adverts.length; l++) {
+  fragment.appendChild(renderPin(adverts[l]));
 }
 
-var pins = document.querySelector('.map__pins');
+var pinsContainer = document.querySelector('.map__pins');
 
-pins.appendChild(fragment);
+pinsContainer.appendChild(fragment);
+
+var mapPins = map.querySelectorAll('.map__pin.hidden');
 
 var advertTemplate = document.querySelector('template').content.querySelector('.map__card');
 
@@ -180,10 +235,73 @@ var generateAdvertCard = function (advert) {
     ' ' + advert.offer.checkout;
   p[4].textContent = advert.offer.description;
 
+  advertElement.classList.add('hidden');
 
   return advertElement;
 };
 
 var mapFilter = map.querySelector('.map__filters-container');
 
-map.insertBefore(generateAdvertCard(adverts[0]), mapFilter);
+for (var q = 0; q < adverts.length; q++) {
+  map.insertBefore(generateAdvertCard(adverts[q]), mapFilter);
+}
+
+var advertCard = map.querySelectorAll('.map__card');
+
+// Понимаю, что так писать неправильно, но например так
+//
+// for (var s = 0; s < adverts.length; s++) {
+//   mapPins[s].addEventListener('click', function () {
+//     advertCard[s].classList.remove('hidden');
+//   });
+// }
+//
+// тоже неправильно, а если использовать разные переменные в циклах, то клик по одной метке открывает все карточки
+
+mapPins[0].addEventListener('click', function () {
+  advertCard[0].classList.remove('hidden');
+});
+
+mapPins[1].addEventListener('click', function () {
+  advertCard[1].classList.remove('hidden');
+});
+
+mapPins[2].addEventListener('click', function () {
+  advertCard[2].classList.remove('hidden');
+});
+
+mapPins[3].addEventListener('click', function () {
+  advertCard[3].classList.remove('hidden');
+});
+
+mapPins[4].addEventListener('click', function () {
+  advertCard[4].classList.remove('hidden');
+});
+
+mapPins[5].addEventListener('click', function () {
+  advertCard[5].classList.remove('hidden');
+});
+
+mapPins[6].addEventListener('click', function () {
+  advertCard[6].classList.remove('hidden');
+});
+
+mapPins[7].addEventListener('click', function () {
+  advertCard[7].classList.remove('hidden');
+});
+
+// Не уверен что это сейчас нужно + та же проблема, что и с открытием
+
+// var closeCard = map.querySelectorAll('.map__card .popup__close');
+//
+// closeCard[0].addEventListener('click', function () {
+//   advertCard[0].classList.add('hidden');
+// });
+//
+// document.addEventListener('keydown', function (evt) {
+//   if (evt.keyCode === ESC_KEYCODE) {
+//     for (var s = 0; s < adverts.length; s++) {
+//       advertCard[s].classList.add('hidden');
+//     }
+//   }
+// });
