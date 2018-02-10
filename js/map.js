@@ -1,6 +1,6 @@
 'use strict';
 
-// var ESC_KEYCODE = 27;
+var ESC_KEYCODE = 27;
 
 var ADVERTS_NUMBER = 8;
 
@@ -246,62 +246,30 @@ for (var q = 0; q < adverts.length; q++) {
   map.insertBefore(generateAdvertCard(adverts[q]), mapFilter);
 }
 
-var advertCard = map.querySelectorAll('.map__card');
+var advertCards = map.querySelectorAll('.map__card');
 
-// Понимаю, что так писать неправильно, но например так
-//
-// for (var s = 0; s < adverts.length; s++) {
-//   mapPins[s].addEventListener('click', function () {
-//     advertCard[s].classList.remove('hidden');
-//   });
-// }
-//
-// тоже неправильно, а если использовать разные переменные в циклах, то клик по одной метке открывает все карточки
+for (var x = 0; x < mapPins.length; x++) {
+  (function (pin, card) {
+    pin.addEventListener('click', function () {
+      card.classList.remove('hidden');
+    });
+  })(mapPins[x], advertCards[x]);
+}
 
-mapPins[0].addEventListener('click', function () {
-  advertCard[0].classList.remove('hidden');
+var closeCards = map.querySelectorAll('.map__card .popup__close');
+
+for (var z = 0; z < advertCards.length; z++) {
+  (function (close, card) {
+    close.addEventListener('click', function () {
+      card.classList.add('hidden');
+    });
+  })(closeCards[z], advertCards[z]);
+}
+
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    for (var s = 0; s < advertCards.length; s++) {
+      advertCards[s].classList.add('hidden');
+    }
+  }
 });
-
-mapPins[1].addEventListener('click', function () {
-  advertCard[1].classList.remove('hidden');
-});
-
-mapPins[2].addEventListener('click', function () {
-  advertCard[2].classList.remove('hidden');
-});
-
-mapPins[3].addEventListener('click', function () {
-  advertCard[3].classList.remove('hidden');
-});
-
-mapPins[4].addEventListener('click', function () {
-  advertCard[4].classList.remove('hidden');
-});
-
-mapPins[5].addEventListener('click', function () {
-  advertCard[5].classList.remove('hidden');
-});
-
-mapPins[6].addEventListener('click', function () {
-  advertCard[6].classList.remove('hidden');
-});
-
-mapPins[7].addEventListener('click', function () {
-  advertCard[7].classList.remove('hidden');
-});
-
-// Не уверен что это сейчас нужно + та же проблема, что и с открытием
-
-// var closeCard = map.querySelectorAll('.map__card .popup__close');
-//
-// closeCard[0].addEventListener('click', function () {
-//   advertCard[0].classList.add('hidden');
-// });
-//
-// document.addEventListener('keydown', function (evt) {
-//   if (evt.keyCode === ESC_KEYCODE) {
-//     for (var s = 0; s < adverts.length; s++) {
-//       advertCard[s].classList.add('hidden');
-//     }
-//   }
-// });
