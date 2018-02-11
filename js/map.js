@@ -83,12 +83,8 @@ var noticeFormTimeIn = noticeForm.querySelector('#timein');
 var noticeFormTimeOut = noticeForm.querySelector('#timeout');
 
 var onTimeChange = function (element1, element2) {
-  if (element1.value === '12:00') {
-    element2.value = '12:00';
-  } if (element1.value === '13:00') {
-    element2.value = '13:00';
-  } if (element1.value === '14:00') {
-    element2.value = '14:00';
+  if (element1.value !== element2.value) {
+    element2.value = element1.value;
   }
 };
 
@@ -104,26 +100,34 @@ var noticeFormRoomNumber = noticeForm.querySelector('#room_number');
 
 var noticeFormCapacity = noticeForm.querySelector('#capacity');
 
-// Работает не совсем так, как хотелось бы
+var options = [
+  [2],
+  [1, 2],
+  [0, 1, 2],
+  [3]
+];
 
-noticeFormCapacity.addEventListener('input', function () {
-  if (noticeFormRoomNumber.value === '1') {
-    if (noticeFormCapacity.value === '2' || noticeFormCapacity.value === '3') {
-      noticeFormCapacity.setCustomValidity('Количество ностей не должно' +
-        ' превышать 1');
-    }
-    if (noticeFormRoomNumber.value === '2' && noticeFormCapacity.value === '3') {
-      noticeFormCapacity.setCustomValidity('Количество ностей не должно' +
-        ' превышать 2');
-    }
-    if (noticeFormRoomNumber.value === '100') {
-      if (noticeFormCapacity.value === '1' || noticeFormCapacity.value === '2' || noticeFormCapacity.value === '3') {
-        noticeFormCapacity.setCustomValidity('Это количество комнат не для' +
-          ' гостей');
-      }
-    }
-  }
-});
+// Объясни пожалуйста как это работает, не могу до конца разобраться
+
+var onRoomsChange = function () {
+  // Здесь разрешается выбор количества гостей в зависимости от выбранного
+  // количества
+  // комнат,
+  // например при 2 это 2 и 1
+  var allowedOption = options[noticeFormRoomNumber.selectedIndex];
+  // Здесь некий выбор по умолчанию, который равен первому элементу из
+  // выбранного на предыдущем шаге массива, например для 3 это 0, значит по
+  // умолчанию будет выбрано 3 гостя
+  var defaultOption = allowedOption[0];
+  // Здесь просто выставляется выбранное на предыдущем шаге значение
+  noticeFormCapacity[defaultOption].selected = true;
+  [].forEach.call(noticeFormCapacity.options, function (option, index) {
+    // Не могу понять, что значит allowedOption.includes(index)
+    option.hidden = !allowedOption.includes(index);
+  });
+};
+
+noticeFormRoomNumber.addEventListener('input', onRoomsChange);
 
 var titles = [
   'Большая уютная квартира',
