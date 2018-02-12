@@ -82,10 +82,8 @@ var noticeFormTimeIn = noticeForm.querySelector('#timein');
 
 var noticeFormTimeOut = noticeForm.querySelector('#timeout');
 
-var onTimeChange = function (element1, element2) {
-  if (element1.value !== element2.value) {
-    element2.value = element1.value;
-  }
+var onTimeChange = function (left, right) {
+  right.value = left.value;
 };
 
 noticeFormTimeIn.addEventListener('input', function () {
@@ -107,27 +105,26 @@ var options = [
   [3]
 ];
 
-// Объясни пожалуйста как это работает, не могу до конца разобраться
-
 var onRoomsChange = function () {
-  // Здесь разрешается выбор количества гостей в зависимости от выбранного
-  // количества
-  // комнат,
-  // например при 2 это 2 и 1
-  var allowedOption = options[noticeFormRoomNumber.selectedIndex];
-  // Здесь некий выбор по умолчанию, который равен первому элементу из
-  // выбранного на предыдущем шаге массива, например для 3 это 0, значит по
-  // умолчанию будет выбрано 3 гостя
-  var defaultOption = allowedOption[0];
-  // Здесь просто выставляется выбранное на предыдущем шаге значение
+  var allowedOptions = options[noticeFormRoomNumber.selectedIndex];
+  var defaultOption = allowedOptions[0];
   noticeFormCapacity[defaultOption].selected = true;
   [].forEach.call(noticeFormCapacity.options, function (option, index) {
-    // Не могу понять, что значит allowedOption.includes(index)
-    option.hidden = !allowedOption.includes(index);
+    option.hidden = !allowedOptions.includes(index);
   });
 };
 
 noticeFormRoomNumber.addEventListener('input', onRoomsChange);
+
+var noticeFormSubmit = noticeForm.querySelector('.form__submit');
+
+noticeFormSubmit.addEventListener('click', function (evt) {
+  if (noticeFormCapacity.value > noticeFormRoomNumber.value) {
+    evt.preventDefault();
+  }
+});
+
+// Для адреса не стал делать валидацию, потому что он не может быть пустым
 
 var titles = [
   'Большая уютная квартира',
