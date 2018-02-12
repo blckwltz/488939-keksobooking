@@ -46,9 +46,97 @@ var randomSeed = function () {
   return Math.random() - 0.5;
 };
 
-var map = document.querySelector('.map');
-
 var noticeForm = document.querySelector('.notice__form');
+
+noticeForm.setAttribute('action', 'https://js.dump.academy/keksobooking');
+
+var noticeFormTitle = noticeForm.querySelector('#title');
+
+noticeFormTitle.setAttribute('required', 'required');
+
+noticeFormTitle.setAttribute('minlength', 30);
+
+noticeFormTitle.setAttribute('maxlength', 100);
+
+var noticeFormAddress = noticeForm.querySelector('#address');
+
+noticeFormAddress.setAttribute('disabled', 'disabled');
+
+var noticeFormPrice = noticeForm.querySelector('#price');
+
+noticeFormPrice.setAttribute('required', 'required');
+
+noticeFormPrice.setAttribute('max', 1000000);
+
+var noticeFormType = noticeForm.querySelector('#type');
+
+if (noticeFormType.value === 'flat') {
+  noticeFormPrice.setAttribute('min', 1000);
+}
+
+var onTypeChange = function () {
+  if (noticeFormType.value === 'bungalo') {
+    noticeFormPrice.setAttribute('min', 0);
+  } if (noticeFormType.value === 'flat') {
+    noticeFormPrice.setAttribute('min', 1000);
+  } if (noticeFormType.value === 'house') {
+    noticeFormPrice.setAttribute('min', 5000);
+  } if (noticeFormType.value === 'palace') {
+    noticeFormPrice.setAttribute('min', 10000);
+  }
+};
+
+noticeFormType.addEventListener('input', function () {
+  onTypeChange();
+});
+
+var noticeFormTimeIn = noticeForm.querySelector('#timein');
+
+var noticeFormTimeOut = noticeForm.querySelector('#timeout');
+
+var onTimeChange = function (left, right) {
+  right.value = left.value;
+};
+
+noticeFormTimeIn.addEventListener('input', function () {
+  onTimeChange(noticeFormTimeIn, noticeFormTimeOut);
+});
+
+noticeFormTimeOut.addEventListener('input', function () {
+  onTimeChange(noticeFormTimeOut, noticeFormTimeIn);
+});
+
+var noticeFormRoomNumber = noticeForm.querySelector('#room_number');
+
+var noticeFormCapacity = noticeForm.querySelector('#capacity');
+
+var options = [
+  [2],
+  [1, 2],
+  [0, 1, 2],
+  [3]
+];
+
+var onRoomsChange = function () {
+  var allowedOptions = options[noticeFormRoomNumber.selectedIndex];
+  var defaultOption = allowedOptions[0];
+  noticeFormCapacity[defaultOption].selected = true;
+  [].forEach.call(noticeFormCapacity.options, function (option, index) {
+    option.hidden = !allowedOptions.includes(index);
+  });
+};
+
+noticeFormRoomNumber.addEventListener('input', onRoomsChange);
+
+var noticeFormSubmit = noticeForm.querySelector('.form__submit');
+
+noticeFormSubmit.addEventListener('click', function (evt) {
+  if (noticeFormCapacity.value > noticeFormRoomNumber.value) {
+    evt.preventDefault();
+  }
+});
+
+var map = document.querySelector('.map');
 
 var mapPinMain = map.querySelector('.map__pin--main');
 
