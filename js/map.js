@@ -51,12 +51,6 @@
 
     var onPinClick = function (pin, advert) {
       pin.addEventListener('click', function () {
-        // Так и не смог разобраться, почему не работает с использованием
-        // переменных
-        // var advertCard = document.querySelector('.map__card') вместо
-        // map.children[1] и
-        // var closeCard = advertCard.querySelector('.popup__close') вместо
-        // map.children[1].children[1]
         map.replaceChild(window.generateAdvertCard(advert), map.children[1]);
         map.children[1].classList.remove('hidden');
         map.children[1].children[1].addEventListener('click', function () {
