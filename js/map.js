@@ -3,6 +3,17 @@
 (function () {
   var ESC_KEYCODE = 27;
 
+  var MAP_BORDERS = {
+    x: {
+      min: 35,
+      max: 1165
+    },
+    y: {
+      min: 220,
+      max: 655
+    }
+  };
+
   var MAIN_PIN_POSITION = {
     x: 600,
     y: 375
@@ -45,7 +56,7 @@
       fragment.appendChild(window.renderPin(window.adverts[i]));
     }
     pinsContainer.appendChild(fragment);
-    noticeFormAddress.value = (MAIN_PIN_POSITION.x + POSITION_OFFSET.x) + ', ' + (MAIN_PIN_POSITION.y + POSITION_OFFSET.y);
+    noticeFormAddress.value = (mapPinMain.offsetLeft + POSITION_OFFSET.x) + ', ' + (mapPinMain.offsetTop + POSITION_OFFSET.y);
 
     var mapPins = pinsContainer.querySelectorAll('button:not(.map__pin--main)');
 
@@ -65,6 +76,55 @@
       onPinClick(pin, advert);
     }
   };
+
+  mapPinMain.addEventListener('mousedown', function (evt) {
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      if ((mapPinMain.offsetLeft - shift.x) < MAP_BORDERS.x.min) {
+        mapPinMain.style.left = MAP_BORDERS.x.min + 'px';
+      } else if ((mapPinMain.offsetLeft - shift.x) > MAP_BORDERS.x.max) {
+        mapPinMain.style.left = MAP_BORDERS.x.max;
+      } else {
+        mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+      }
+
+      if ((mapPinMain.offsetTop - shift.y) < MAP_BORDERS.y.min) {
+        mapPinMain.style.top = MAP_BORDERS.y.min + 'px';
+      } else if ((mapPinMain.offsetTop - shift.y) > MAP_BORDERS.y.max) {
+        mapPinMain.style.top = MAP_BORDERS.y.max;
+      } else {
+        mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+      }
+
+      noticeFormAddress.value = (mapPinMain.offsetLeft + POSITION_OFFSET.x) + ', ' + (mapPinMain.offsetTop + POSITION_OFFSET.y);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 
   var housingFilters = map.querySelectorAll('[id|="housing"]');
 
