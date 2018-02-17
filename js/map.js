@@ -30,18 +30,11 @@
 
   var mapPinMain = map.querySelector('.map__pin--main');
 
-  var fragment = document.createDocumentFragment();
-
   var pinsContainer = document.querySelector('.map__pins');
 
   var mapFilter = map.querySelector('.map__filters-container');
 
   map.insertBefore(window.generateAdvertCard(window.adverts[0]), mapFilter);
-
-
-  mapPinMain.addEventListener('mouseup', function () {
-    toActiveState();
-  });
 
   var toActiveState = function () {
     map.classList.remove('map--faded');
@@ -52,17 +45,17 @@
     [].forEach.call(noticeFilters, function (filter) {
       filter.disabled = false;
     });
-    for (var i = 0; i < window.adverts.length; i++) {
-      fragment.appendChild(window.renderPin(window.adverts[i]));
-    }
-    pinsContainer.appendChild(fragment);
     noticeFormAddress.value = (mapPinMain.offsetLeft + POSITION_OFFSET.x) + ', ' + (mapPinMain.offsetTop + POSITION_OFFSET.y);
 
-    var mapPins = pinsContainer.querySelectorAll('button:not(.map__pin--main)');
+    window.load(function (adverts) {
+      for (var i = 0; i < adverts.length; i++) {
+        pinsContainer.appendChild(window.renderPin(adverts[i]));
+      }
+    });
 
     var onPinClick = function (pin, advert) {
       pin.addEventListener('click', function () {
-        map.replaceChild(window.generateAdvertCard(advert), map.children[1]);
+        map.replaceChild(advert, map.children[1]);
         map.children[1].classList.remove('hidden');
         map.children[1].children[1].addEventListener('click', function () {
           map.children[1].classList.add('hidden');
@@ -70,12 +63,19 @@
       });
     };
 
-    for (var j = 0; j < mapPins.length; j++) {
-      var pin = mapPins[j];
-      var advert = window.adverts[j];
-      onPinClick(pin, advert);
-    }
+    window.load(function (adverts) {
+      var mapPins = pinsContainer.querySelectorAll('button:not(.map__pin--main)');
+      for (var j = 0; j < mapPins.length; j++) {
+        var pin = mapPins[j];
+        var advert = window.generateAdvertCard(adverts[j]);
+        onPinClick(pin, advert);
+      }
+    });
   };
+
+  mapPinMain.addEventListener('mouseup', function () {
+    toActiveState();
+  });
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {
@@ -122,6 +122,12 @@
       document.removeEventListener('mouseup', onMouseUp);
     };
 
+    var mapPins = pinsContainer.querySelectorAll('button:not(.map__pin--main)');
+
+    for (var i = 0; i < mapPins.length; i++) {
+      pinsContainer.removeChild(mapPins[i]);
+    }
+
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
@@ -131,6 +137,7 @@
   [].forEach.call(housingFilters, function (filter) {
     filter.disabled = true;
   });
+
   var noticeFormAddress = noticeForm.querySelector('#address');
 
   noticeFormAddress.value = MAIN_PIN_POSITION.x + ', ' + MAIN_PIN_POSITION.y;
