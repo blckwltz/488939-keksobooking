@@ -1,16 +1,15 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
 
   var MAP_BORDERS = {
     x: {
-      min: 35,
-      max: 1165
+      min: 0,
+      max: 1200
     },
     y: {
-      min: 220,
-      max: 655
+      min: 150,
+      max: 500
     }
   };
 
@@ -24,13 +23,9 @@
     y: 87
   };
 
-  var noticeForm = document.querySelector('.notice__form');
-
   var map = document.querySelector('.map');
 
   var mapPinMain = map.querySelector('.map__pin--main');
-
-  var fragment = document.createDocumentFragment();
 
   var pinsContainer = document.querySelector('.map__pins');
 
@@ -38,31 +33,26 @@
 
   map.insertBefore(window.generateAdvertCard(window.adverts[0]), mapFilter);
 
-
-  mapPinMain.addEventListener('mouseup', function () {
-    toActiveState();
-  });
-
   var toActiveState = function () {
     map.classList.remove('map--faded');
-    noticeForm.classList.remove('notice__form--disabled');
+    window.form.form.classList.remove('notice__form--disabled');
     [].forEach.call(housingFilters, function (filter) {
       filter.disabled = false;
     });
     [].forEach.call(noticeFilters, function (filter) {
       filter.disabled = false;
     });
-    for (var i = 0; i < window.adverts.length; i++) {
-      fragment.appendChild(window.renderPin(window.adverts[i]));
-    }
-    pinsContainer.appendChild(fragment);
-    noticeFormAddress.value = (mapPinMain.offsetLeft + POSITION_OFFSET.x) + ', ' + (mapPinMain.offsetTop + POSITION_OFFSET.y);
+    window.form.address.value = (mapPinMain.offsetLeft + POSITION_OFFSET.x) + ', ' + (mapPinMain.offsetTop + POSITION_OFFSET.y);
 
-    var mapPins = pinsContainer.querySelectorAll('button:not(.map__pin--main)');
+    window.load(function (adverts) {
+      for (var i = 0; i < adverts.length; i++) {
+        pinsContainer.appendChild(window.renderPin(adverts[i]));
+      }
+    }, window.util.renderErrorNode);
 
     var onPinClick = function (pin, advert) {
       pin.addEventListener('click', function () {
-        map.replaceChild(window.generateAdvertCard(advert), map.children[1]);
+        map.replaceChild(advert, map.children[1]);
         map.children[1].classList.remove('hidden');
         map.children[1].children[1].addEventListener('click', function () {
           map.children[1].classList.add('hidden');
@@ -70,12 +60,19 @@
       });
     };
 
-    for (var j = 0; j < mapPins.length; j++) {
-      var pin = mapPins[j];
-      var advert = window.adverts[j];
-      onPinClick(pin, advert);
-    }
+    window.load(function (adverts) {
+      var mapPins = pinsContainer.querySelectorAll('button:not(.map__pin--main)');
+      for (var j = 0; j < mapPins.length; j++) {
+        var pin = mapPins[j];
+        var advert = window.generateAdvertCard(adverts[j]);
+        onPinClick(pin, advert);
+      }
+    });
   };
+
+  mapPinMain.addEventListener('mouseup', function () {
+    toActiveState();
+  });
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     var startCoords = {
@@ -99,7 +96,7 @@
       if ((mapPinMain.offsetLeft - shift.x) < MAP_BORDERS.x.min) {
         mapPinMain.style.left = MAP_BORDERS.x.min + 'px';
       } else if ((mapPinMain.offsetLeft - shift.x) > MAP_BORDERS.x.max) {
-        mapPinMain.style.left = MAP_BORDERS.x.max;
+        mapPinMain.style.left = MAP_BORDERS.x.max + 'px';
       } else {
         mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
       }
@@ -107,12 +104,12 @@
       if ((mapPinMain.offsetTop - shift.y) < MAP_BORDERS.y.min) {
         mapPinMain.style.top = MAP_BORDERS.y.min + 'px';
       } else if ((mapPinMain.offsetTop - shift.y) > MAP_BORDERS.y.max) {
-        mapPinMain.style.top = MAP_BORDERS.y.max;
+        mapPinMain.style.top = MAP_BORDERS.y.max + 'px';
       } else {
         mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
       }
 
-      noticeFormAddress.value = (mapPinMain.offsetLeft + POSITION_OFFSET.x) + ', ' + (mapPinMain.offsetTop + POSITION_OFFSET.y);
+      window.form.address.value = (mapPinMain.offsetLeft + POSITION_OFFSET.x) + ', ' + (mapPinMain.offsetTop + POSITION_OFFSET.y);
     };
 
     var onMouseUp = function (upEvt) {
@@ -121,6 +118,12 @@
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
+
+    var mapPins = pinsContainer.querySelectorAll('button:not(.map__pin--main)');
+
+    for (var i = 0; i < mapPins.length; i++) {
+      pinsContainer.removeChild(mapPins[i]);
+    }
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
@@ -131,21 +134,22 @@
   [].forEach.call(housingFilters, function (filter) {
     filter.disabled = true;
   });
-  var noticeFormAddress = noticeForm.querySelector('#address');
 
-  noticeFormAddress.value = MAIN_PIN_POSITION.x + ', ' + MAIN_PIN_POSITION.y;
+  window.form.address.value = MAIN_PIN_POSITION.x + ', ' + MAIN_PIN_POSITION.y;
 
-  var noticeFilters = noticeForm.querySelectorAll('fieldset');
+  var noticeFilters = window.form.form.querySelectorAll('fieldset');
 
   [].forEach.call(noticeFilters, function (filter) {
     filter.disabled = true;
   });
 
   document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
       map.children[1].classList.add('hidden');
     }
   });
+
+  window.map = map;
 })();
 
 //
