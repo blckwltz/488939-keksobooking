@@ -1,6 +1,14 @@
 'use strict';
 
 (function () {
+  var Status = {
+    OK: 200,
+    BAD_REQUEST: 400,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500
+  };
+
+  var HTTP_TIMEOUT = 10000;
 
   window.load = function (onLoad, onError) {
     var url = 'https://js.dump.academy/keksobooking/data';
@@ -10,22 +18,30 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onLoad(xhr.response);
-      } else {
-        onError('При загрузке объявлений произошла ошибка ' + xhr.status);
+      switch (xhr.status) {
+        case Status.OK:
+          onLoad(xhr.response);
+          break;
+        case Status.BAD_REQUEST:
+          onError('При загрузке объявлений произошла' +
+          ' ошибка ' + xhr.status, window.map);
+          break;
+        case Status.NOT_FOUND:
+          onError('При загрузке объявлений произошла' +
+            ' ошибка ' + xhr.status, window.map);
+          break;
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError('Произошла ошибка соединения', window.map);
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Загрузка объявлений заняла более ' + xhr.timeout / 1000 + ' секунд');
+      onError('Загрузка объявлений заняла более ' + xhr.timeout / 1000 + ' секунд', window.map);
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = HTTP_TIMEOUT;
 
     xhr.open('GET', url);
 
@@ -40,22 +56,34 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onLoad(xhr.response);
-      } else {
-        onError('При отправке формы произошла ошибка ' + xhr.status);
+      switch (xhr.status) {
+        case Status.OK:
+          onLoad(xhr.response);
+          break;
+        case Status.BAD_REQUEST:
+          onError('При отправке формы произошла' +
+            ' ошибка ' + xhr.status, window.form.form);
+          break;
+        case Status.NOT_FOUND:
+          onError('При отправке формы произошла' +
+            ' ошибка ' + xhr.status, window.form.form);
+          break;
+        case Status.INTERNAL_SERVER_ERROR:
+          onError('При отправке формы произошла' +
+            ' ошибка ' + xhr.status, window.form.form);
+          break;
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError('Произошла ошибка соединения', window.form.form);
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Отправка данных заняла более ' + xhr.timeout / 1000 + ' секунд');
+      onError('Отправка данных заняла более ' + (xhr.timeout / 1000) + ' секунд', window.form.form);
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = HTTP_TIMEOUT;
 
     xhr.open('POST', url);
 

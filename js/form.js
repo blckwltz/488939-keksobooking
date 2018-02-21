@@ -5,11 +5,13 @@
 
   noticeForm.action = 'https://js.dump.academy/keksobooking';
 
-  noticeForm.addEventListener('submit', function (evt) {
+  noticeForm.addEventListener('submit', function () {
     window.upload(new FormData(noticeForm), function () {
-      noticeForm.classList.add('notice__form--disabled');
-    });
-    evt.preventDefault();
+      noticeFormTitle.value = '';
+      noticeFormPrice.value = '';
+      noticeFormTimeIn.value = '12:00';
+      noticeFormRoomNumber.value = '1';
+    }, window.util.renderErrorNode);
   });
 
   var noticeFormTitle = noticeForm.querySelector('#title');
@@ -22,7 +24,7 @@
 
   var noticeFormAddress = noticeForm.querySelector('#address');
 
-  noticeFormAddress.disabled = true;
+  noticeFormAddress.readOnly = true;
 
   var noticeFormPrice = noticeForm.querySelector('#price');
 
@@ -88,4 +90,11 @@
   };
 
   noticeFormRoomNumber.addEventListener('input', onRoomsChange);
+
+  onRoomsChange();
+
+  window.form = {
+    form: noticeForm,
+    address: noticeFormAddress
+  };
 })();

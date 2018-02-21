@@ -2,9 +2,9 @@
 
 (function () {
   var TYPE_LABELS = {
-    flat: 'Квартира',
-    bungalo: 'Бунгало',
-    house: 'Дом'
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом'
   };
 
   var advertTemplate = document.querySelector('template').content.querySelector('.map__card');
@@ -18,8 +18,19 @@
 
     advertElement.querySelector('.popup__price').textContent = advert.offer.price + ' \u20BD/ночь';
 
-    advertElement.querySelector('.popup__pictures li img').src = advert.offer.photos[0];
-    advertElement.querySelector('.popup__pictures li img').style.width = 100 + 'px';
+    var photosList = advertElement.querySelector('.popup__pictures');
+
+    var photoTemplate = photosList.querySelector('li');
+
+    advert.offer.photos.forEach(function (photo) {
+      var photoElement = photoTemplate.cloneNode(true);
+      var img = photoElement.querySelector('img');
+      img.src = photo;
+      img.style.width = 100 + 'px';
+      photosList.appendChild(photoElement);
+    });
+
+    photosList.removeChild(photoTemplate);
 
     advertElement.querySelector('h4').textContent = TYPE_LABELS[advert.offer.type];
 
