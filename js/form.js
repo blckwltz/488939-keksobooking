@@ -3,14 +3,9 @@
 (function () {
   var noticeForm = document.querySelector('.notice__form');
 
-  noticeForm.action = 'https://js.dump.academy/keksobooking';
-
   noticeForm.addEventListener('submit', function () {
     window.upload(new FormData(noticeForm), function () {
-      noticeFormTitle.value = '';
-      noticeFormPrice.value = '';
-      noticeFormTimeIn.value = '12:00';
-      noticeFormRoomNumber.value = '1';
+      window.map.toInactiveState();
     }, window.util.renderErrorNode);
   });
 
@@ -35,7 +30,6 @@
   noticeFormPrice.max = 1000000;
 
   var noticeFormType = noticeForm.querySelector('#type');
-
 
   var onTypeChange = function () {
     if (noticeFormType.value === 'bungalo') {
@@ -73,14 +67,13 @@
 
   var noticeFormCapacity = noticeForm.querySelector('#capacity');
 
-  var options = [
-    [2],
-    [1, 2],
-    [0, 1, 2],
-    [3]
-  ];
-
   var onRoomsChange = function () {
+    var options = [
+      [2],
+      [1, 2],
+      [0, 1, 2],
+      [3]
+    ];
     var allowedOptions = options[noticeFormRoomNumber.selectedIndex];
     var defaultOption = allowedOptions[0];
     noticeFormCapacity[defaultOption].selected = true;
@@ -93,8 +86,28 @@
 
   onRoomsChange();
 
+  var noticeFormReset = noticeForm.querySelector('.form__reset');
+
+  noticeFormReset.addEventListener('click', function () {
+    window.map.toInactiveState();
+  });
+
   window.form = {
     form: noticeForm,
-    address: noticeFormAddress
+    address: noticeFormAddress,
+    onRoomsChange: function () {
+      var options = [
+        [2],
+        [1, 2],
+        [0, 1, 2],
+        [3]
+      ];
+      var allowedOptions = options[noticeFormRoomNumber.selectedIndex];
+      var defaultOption = allowedOptions[0];
+      noticeFormCapacity[defaultOption].selected = true;
+      [].forEach.call(noticeFormCapacity.options, function (option, index) {
+        option.hidden = !allowedOptions.includes(index);
+      });
+    }
   };
 })();
