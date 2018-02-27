@@ -34,19 +34,13 @@
 
     advertElement.querySelector('h4').textContent = TYPE_LABELS[advert.offer.type];
 
-    if (advert.offer.features[0] !== 'wifi') {
-      advertElement.querySelector('.popup__features').children[0].classList.remove('feature');
-    } if (advert.offer.features[1] !== 'dishwasher') {
-      advertElement.querySelector('.popup__features').children[1].classList.remove('feature');
-    } if (advert.offer.features[2] !== 'parking') {
-      advertElement.querySelector('.popup__features').children[2].classList.remove('feature');
-    } if (advert.offer.features[3] !== 'washer') {
-      advertElement.querySelector('.popup__features').children[3].classList.remove('feature');
-    } if (advert.offer.features[4] !== 'elevator') {
-      advertElement.querySelector('.popup__features').children[4].classList.remove('feature');
-    } if (advert.offer.features[5] !== 'conditioner') {
-      advertElement.querySelector('.popup__features').children[5].classList.remove('feature');
-    }
+    var featuresElements = advertElement.querySelectorAll('.feature');
+
+    [].forEach.call(featuresElements, function (element) {
+      element.hidden = !advert.offer.features.some(function (feature) {
+        return element.classList.contains('feature--' + feature);
+      });
+    });
 
     var p = advertElement.querySelectorAll('p');
     p[0].children[0].textContent = advert.offer.address;

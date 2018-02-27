@@ -3,10 +3,11 @@
 (function () {
   var noticeForm = document.querySelector('.notice__form');
 
-  noticeForm.addEventListener('submit', function () {
+  noticeForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
     window.upload(new FormData(noticeForm), function () {
       window.map.toInactiveState();
-    }, window.util.renderErrorNode);
+    }, window.util.renderErrorElement);
   });
 
   var noticeFormTitle = noticeForm.querySelector('#title');
@@ -86,6 +87,12 @@
 
   onRoomsChange();
 
+  var noticeFilters = noticeForm.querySelectorAll('fieldset');
+
+  [].forEach.call(noticeFilters, function (filter) {
+    filter.disabled = true;
+  });
+
   var noticeFormReset = noticeForm.querySelector('.form__reset');
 
   noticeFormReset.addEventListener('click', function () {
@@ -95,6 +102,7 @@
   window.form = {
     form: noticeForm,
     address: noticeFormAddress,
+    filters: noticeFilters,
     onRoomsChange: function () {
       var options = [
         [2],
