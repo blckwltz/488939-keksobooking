@@ -33,46 +33,48 @@
     });
   };
 
-  var filterPins = data.forEach(function (pin) {
+  var filterPins = function () {
+    data.forEach(function (pin) {
 
-    window.map.map.children[1].hidden = true;
+      window.map.map.children[1].hidden = true;
 
-    var activeFeatures = [].map.call(featuresFiltersActive, function (feature) {
-      return feature.value;
+      var activeFeatures = [].map.call(featuresFiltersActive, function (feature) {
+        return feature.value;
+      });
+
+      var filterByType = function () {
+        return pin.offer.type === typeFilter.value;
+      };
+
+      var filterByPrice = function () {
+        var activePrice = priceValues[selectedPrice];
+        return activePrice(pin.offer.price);
+      };
+
+      var filterByRooms = function () {
+        return pin.offer.rooms.toString() === roomsFilter.value;
+      };
+
+      var filterByGuests = function () {
+        return pin.offer.guests.toString() === guestsFilter.value;
+      };
+
+      var filterByFeature = function () {
+        filterFeatures(activeFeatures, pin);
+      };
+
+      var filter = function () {
+        return filterByType && filterByPrice && filterByRooms
+          && filterByGuests && filterByFeature;
+      };
+
+      var filteredPins = data.filter(filter);
+
+      window.pin.removePins(data);
+
+      window.pin.renderPins(filteredPins);
     });
-
-    var filterByType = function () {
-      return pin.offer.type === typeFilter.value;
-    };
-
-    var filterByPrice = function () {
-      var activePrice = priceValues[selectedPrice];
-      return activePrice(pin.offer.price);
-    };
-
-    var filterByRooms = function () {
-      return pin.offer.rooms.toString() === roomsFilter.value;
-    };
-
-    var filterByGuests = function () {
-      return pin.offer.guests.toString() === guestsFilter.value;
-    };
-
-    var filterByFeature = function () {
-      filterFeatures(activeFeatures, pin);
-    };
-
-    var filter = function () {
-      return filterByType && filterByPrice && filterByRooms
-        && filterByGuests && filterByFeature;
-    };
-
-    var filteredPins = data.filter(filter);
-
-    window.pin.removePins(data);
-
-    window.pin.renderPins(filteredPins);
-  });
+  };
 
   typeFilter.addEventListener('input', function () {
     window.debounce(filterPins, 500);
