@@ -8,8 +8,6 @@
   var featuresFilters = document.querySelectorAll('[id|="filter"]');
   var data = window.map.pins.splice(0);
 
-  var selectedPrice = priceFilter.value;
-
   var priceValues = {
     any: function () {
       return true;
@@ -27,74 +25,67 @@
 
   var featuresFiltersActive = document.querySelectorAll('[id|="filter"]:checked');
 
-  var filterFeatures = function (array, element) {
-    array.forEach(function () {
-      element.hidden = !array.includes(element.value);
+  var activeFeatures = [].map.call(featuresFiltersActive, function (feature) {
+    return feature.value;
+  });
+
+  var filterByType = function (advert) {
+    return advert.offer.type === typeFilter.value;
+  };
+
+  var filterByPrice = function (advert) {
+    var activePrice = priceValues[priceFilter.value];
+    return activePrice(advert.offer.price);
+  };
+
+  var filterByRooms = function (advert) {
+    return advert.offer.rooms.toString() === roomsFilter.value;
+  };
+
+  var filterByGuests = function (advert) {
+    return advert.offer.guests.toString() === guestsFilter.value;
+  };
+
+  var filterByFeature = function (advert) {
+    activeFeatures.every(function (feature) {
+      return advert.offer.features.includes(feature);
     });
   };
 
-  var filterPins = function () {
-    data.forEach(function (pin) {
+  var filterPins = function (advert) {
+    return filterByType(advert) && filterByPrice(advert) && filterByRooms(advert)
+          && filterByGuests(advert) && filterByFeature(advert);
+  };
 
-      window.map.map.children[1].hidden = true;
-
-      var activeFeatures = [].map.call(featuresFiltersActive, function (feature) {
-        return feature.value;
-      });
-
-      var filterByType = function () {
-        return pin.offer.type === typeFilter.value;
-      };
-
-      var filterByPrice = function () {
-        var activePrice = priceValues[selectedPrice];
-        return activePrice(pin.offer.price);
-      };
-
-      var filterByRooms = function () {
-        return pin.offer.rooms.toString() === roomsFilter.value;
-      };
-
-      var filterByGuests = function () {
-        return pin.offer.guests.toString() === guestsFilter.value;
-      };
-
-      var filterByFeature = function () {
-        filterFeatures(activeFeatures, pin);
-      };
-
-      var filter = function () {
-        return filterByType && filterByPrice && filterByRooms
-          && filterByGuests && filterByFeature;
-      };
-
-      var filteredPins = data.filter(filter);
-
-      window.pin.removePins(data);
-
-      window.pin.renderPins(filteredPins);
+  var onFilterChange = function () {
+    var filteredPins = data.filter(function (advert) {
+      filterPins(advert);
     });
+
+    window.pin.removePins(data);
+
+    window.pin.renderPins(filteredPins);
   };
 
   typeFilter.addEventListener('input', function () {
-    window.debounce(filterPins, 500);
+    window.debounce(onFilterChange, 500);
   });
 
   priceFilter.addEventListener('input', function () {
-    window.debounce(filterPins, 500);
+    window.debounce(onFilterChange, 500);
   });
 
   roomsFilter.addEventListener('input', function () {
-    window.debounce(filterPins, 500);
+    window.debounce(onFilterChange, 500);
   });
 
   guestsFilter.addEventListener('input', function () {
-    window.debounce(filterPins, 500);
+    window.debounce(onFilterChange, 500);
   });
 
-  [].forEach.call(featuresFilters, function (filter) {
-    filter.addEventListener('change', function () {
-      window.debounce(filterPins, 500);
+  [].forEach.call(featuresFilters, function (feature) {
+    feature.addEventListener('change', function () {
+      window.debounce(onFilterChange, 500);
     });
   });
 })();
