@@ -169,9 +169,5 @@
     [].forEach.call(window.map.filters, function (filter) {
       filter.addEventListener('change', onFilterChange);
     });
-
-    [].forEach.call(featuresFilters, function (filter) {
-      filter.addEventListener('change', onFilterChange);
-    });
   };
 })();
