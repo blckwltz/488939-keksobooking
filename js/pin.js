@@ -7,11 +7,6 @@
       pin.classList.add('map__pin');
       pin.style.left = advert.location.x + window.util.POSITION_OFFSET.x + 'px';
       pin.style.top = advert.location.y + window.util.POSITION_OFFSET.y + 'px';
-      pin.dataset.type = advert.offer.type;
-      pin.dataset.price = advert.offer.price;
-      pin.dataset.rooms = advert.offer.rooms;
-      pin.dataset.guests = advert.offer.guests;
-      pin.dataset.features = advert.offer.features;
 
       var image = document.createElement('img');
       image.src = advert.author.avatar;
@@ -34,9 +29,9 @@
     onPinClick: function (pin, advert) {
       pin.addEventListener('click', function () {
         window.map.map.replaceChild(advert, window.map.map.children[1]);
-        window.map.map.children[1].classList.remove('hidden');
+        window.map.map.children[1].hidden = false;
         window.map.map.children[1].children[1].addEventListener('click', function () {
-          window.map.map.children[1].classList.add('hidden');
+          window.map.map.children[1].hidden = true;
         });
         document.addEventListener('keydown', function (evt) {
           if (evt.keyCode === window.util.ESC_KEYCODE) {

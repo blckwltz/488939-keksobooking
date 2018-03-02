@@ -37,8 +37,11 @@
     var featuresElements = advertElement.querySelectorAll('.feature');
 
     [].forEach.call(featuresElements, function (element) {
-      element.hidden = !advert.offer.features.some(function (feature) {
-        return element.classList.contains('feature--' + feature);
+      element.style = 'display: none';
+      advert.offer.features.forEach(function (feature) {
+        if (element.classList.contains('feature--' + feature)) {
+          element.style = 'display: inline-block';
+        }
       });
     });
 
@@ -49,7 +52,7 @@
       ' ' + advert.offer.checkout;
     p[4].textContent = advert.offer.description;
 
-    advertElement.classList.add('hidden');
+    advertElement.hidden = true;
 
     return advertElement;
   };

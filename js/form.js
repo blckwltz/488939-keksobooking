@@ -33,15 +33,13 @@
   var noticeFormType = noticeForm.querySelector('#type');
 
   var onTypeChange = function () {
-    if (noticeFormType.value === 'bungalo') {
-      noticeFormPrice.min = 0;
-    } if (noticeFormType.value === 'flat') {
-      noticeFormPrice.min = 1000;
-    } if (noticeFormType.value === 'house') {
-      noticeFormPrice.min = 5000;
-    } if (noticeFormType.value === 'palace') {
-      noticeFormPrice.min = 10000;
-    }
+    var minimumPrices = {
+      bungalo: 0,
+      flat: 1000,
+      house: 5000,
+      palace: 10000
+    };
+    noticeFormPrice.min = minimumPrices[noticeFormType.value];
   };
 
   noticeFormType.addEventListener('input', function () {
@@ -93,6 +91,26 @@
     filter.disabled = true;
   });
 
+  var noticeFormInputs = noticeForm.querySelectorAll('.form__element input');
+
+  [].forEach.call(noticeFormInputs, function (input) {
+    input.addEventListener('input', function () {
+      if (input.checkValidity() === true) {
+        input.style = 'outline: none';
+      }
+    });
+  });
+
+  var noticeFormSubmit = noticeForm.querySelector('.form__submit');
+
+  noticeFormSubmit.addEventListener('click', function () {
+    [].forEach.call(noticeFormInputs, function (input) {
+      if (input.checkValidity() === false) {
+        input.style = 'outline: thick double red';
+      }
+    });
+  });
+
   var noticeFormReset = noticeForm.querySelector('.form__reset');
 
   noticeFormReset.addEventListener('click', function () {
@@ -102,6 +120,7 @@
   window.form = {
     form: noticeForm,
     address: noticeFormAddress,
+    inputs: noticeFormInputs,
     filters: noticeFilters,
     onRoomsChange: function () {
       var options = [
