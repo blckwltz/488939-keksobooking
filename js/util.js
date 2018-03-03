@@ -7,15 +7,6 @@
       x: 32,
       y: 87
     },
-    getRandomNumber: function (min, max) {
-      return Math.floor(Math.random() * (max - min) + min);
-    },
-    getRandomElement: function (array) {
-      return array[window.util.getRandomNumber(0, array.length)];
-    },
-    randomSeed: function () {
-      return Math.random() - 0.5;
-    },
     renderErrorElement: function (errorMessage, element) {
       var errorElement = document.createElement('div');
       element.style.position = 'relative';

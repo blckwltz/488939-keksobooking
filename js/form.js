@@ -1,6 +1,13 @@
 'use strict';
 
 (function () {
+
+  var OPTIONS = [
+    [2],
+    [1, 2],
+    [0, 1, 2],
+    [3]
+  ];
   var noticeForm = document.querySelector('.notice__form');
 
   noticeForm.addEventListener('submit', function (evt) {
@@ -67,13 +74,7 @@
   var noticeFormCapacity = noticeForm.querySelector('#capacity');
 
   var onRoomsChange = function () {
-    var options = [
-      [2],
-      [1, 2],
-      [0, 1, 2],
-      [3]
-    ];
-    var allowedOptions = options[noticeFormRoomNumber.selectedIndex];
+    var allowedOptions = OPTIONS[noticeFormRoomNumber.selectedIndex];
     var defaultOption = allowedOptions[0];
     noticeFormCapacity[defaultOption].selected = true;
     [].forEach.call(noticeFormCapacity.options, function (option, index) {
@@ -123,13 +124,7 @@
     inputs: noticeFormInputs,
     selects: noticeFormSelects,
     onRoomsChange: function () {
-      var options = [
-        [2],
-        [1, 2],
-        [0, 1, 2],
-        [3]
-      ];
-      var allowedOptions = options[noticeFormRoomNumber.selectedIndex];
+      var allowedOptions = OPTIONS[noticeFormRoomNumber.selectedIndex];
       var defaultOption = allowedOptions[0];
       noticeFormCapacity[defaultOption].selected = true;
       [].forEach.call(noticeFormCapacity.options, function (option, index) {

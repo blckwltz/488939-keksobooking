@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var TYPE_LABELS = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
@@ -58,7 +59,9 @@
       return advertElement;
     },
     hideCard: function () {
-      window.map.map.querySelector('.map__card').hidden = true;
+      if (window.map.map.children[1] !== window.map.filtersContainer) {
+        window.map.map.querySelector('.map__card').hidden = true;
+      }
     }
   };
 })();

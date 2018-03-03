@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var PHOTOS_AMOUNT = 3;
@@ -11,7 +12,7 @@
     });
   };
 
-  var onImageChoose = function (chooser, index, image) { // переименовать
+  var imageChooser = function (chooser, index, image) {
     chooser.addEventListener('change', function () {
       var file = chooser.files[index];
       var fileName = file.name.toLowerCase();
@@ -34,7 +35,7 @@
   var avatarPreview = document.querySelector('.notice__preview');
   var avatarImage = avatarPreview.querySelector('img');
 
-  onImageChoose(avatarChooser, 0, avatarImage);
+  imageChooser(avatarChooser, 0, avatarImage);
 
   var photosChooser = document.querySelector('#images');
   photosChooser.multiple = true;
@@ -61,7 +62,7 @@
 
   for (var j = 0; j < PHOTOS_AMOUNT; j++) {
     var images = photoImages[j];
-    onImageChoose(photosChooser, j, images);
+    imageChooser(photosChooser, j, images);
   }
 
   [].forEach.call(photoImages, function (image) {
