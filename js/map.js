@@ -87,13 +87,17 @@
         feature.checked = false;
       });
 
+      window.form.description.value = '';
+
       mapPinMain.style.left = MAIN_PIN_POSITION.x + 'px';
       mapPinMain.style.top = MAIN_PIN_POSITION.y + 'px';
       window.form.address.value = MAIN_PIN_POSITION.x + ', ' + MAIN_PIN_POSITION.y;
 
       window.pin.removePins();
 
-      window.form.rooms.value = 1;
+      window.form.type.value = window.form.DEFAULT_TYPE;
+
+      window.form.rooms.value = window.form.DEFAULT_ROOM_NUMBER;
 
       window.form.onRoomsChange();
 

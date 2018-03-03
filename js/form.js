@@ -119,12 +119,16 @@
   });
 
   window.form = {
+    DEFAULT_ROOM_NUMBER: 1,
+    DEFAULT_TYPE: 'flat',
     form: noticeForm,
     address: noticeFormAddress,
+    type: noticeFormType,
     rooms: noticeFormRoomNumber,
     inputs: noticeFormInputs,
     selects: noticeFormSelects,
     features: noticeForm.querySelectorAll('[name="features"]'),
+    description: noticeForm.querySelector('#description'),
     onRoomsChange: function () {
       var allowedOptions = OPTIONS[noticeFormRoomNumber.selectedIndex];
       var defaultOption = allowedOptions[0];
