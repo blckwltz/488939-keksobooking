@@ -1,11 +1,11 @@
 'use strict';
 
 (function () {
-  // var typeFilter = window.map.map.querySelector('#housing-type');
-  // var priceFilter = window.map.map.querySelector('#housing-price');
-  // var roomsFilter = window.map.map.querySelector('#housing-rooms');
-  // var guestsFilter = window.map.map.querySelector('#housing-guests');
-  // var featuresFilters = document.querySelectorAll('[id|="filter"]');
+  // var typeFilter = document.querySelector('#housing-type');
+  // var priceFilter = document.querySelector('#housing-price');
+  // var roomsFilter = document.querySelector('#housing-rooms');
+  // var guestsFilter = document.querySelector('#housing-guests');
+  // var housingFilters = document.querySelectorAll('[id|="housing"]');
   //
   // var priceValues = {
   //   any: function () {
@@ -50,44 +50,33 @@
   // };
   //
   // var filterByFeature = function (advert) {
-  //   var featuresFiltersActive = document.querySelectorAll('[id|="filter"]:checked');
+  //   var featuresFiltersActive = document.querySelectorAll('[name="features"]:checked');
   //   var activeFeatures = [].map.call(featuresFiltersActive, function (filter) {
   //     return filter.value;
   //   });
-  //   activeFeatures.every(function (feature) {
+  //   return activeFeatures.every(function (feature) {
   //     return advert.offer.features.includes(feature);
   //   });
   // };
   //
-  // // var filterPins = function (advert) {
-  // //   return filterByType(advert) && filterByPrice(advert) && filterByRooms(advert)
-  // //     && filterByGuests(advert);
-  // // };
+  // var filterByParameters = function (advert) {
+  //   return filterByType(advert) && filterByPrice(advert) && filterByRooms(advert)
+  //     && filterByGuests(advert) && filterByFeature(advert);
+  // };
   //
-  // window.onFilterChange = function () {
-  //   var data = loadedData.splice(0);
+  // window.filterPins = function (data) {
+  //   var filteredPins = data.slice().filter(filterByParameters);
   //
-  //   var filteredPins = data.filter(function (advert) {
-  //     return filterByType(advert) && filterByPrice(advert) && filterByRooms(advert)
-  //       && filterByGuests(advert);
-  //   });
+  //   window.card.hideCard();
   //
-  //   window.map.map.children[1].hidden = true;
-  //
-  //   window.pin.removePins(loadedData);
+  //   window.pin.removePins();
   //
   //   window.pin.renderPins(filteredPins);
+  // };
   //
-  //   typeFilter.addEventListener('change', window.onFilterChange);
-  //
-  //   priceFilter.addEventListener('change', window.onFilterChange);
-  //
-  //   roomsFilter.addEventListener('change', window.onFilterChange);
-  //
-  //   guestsFilter.addEventListener('change', window.onFilterChange);
-  //
-  //   [].forEach.call(featuresFilters, function (filter) {
-  //     filter.addEventListener('change', window.onFilterChange);
+  // window.onFilterChange = function () {
+  //   [].forEach.call(housingFilters, function (filter) {
+  //     filter.addEventListener('change', window.filterPins);
   //   });
   // };
 })();

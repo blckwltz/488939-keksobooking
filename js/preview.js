@@ -6,12 +6,12 @@
   var PHOTOS_AMOUNT = 3;
 
   var matches = function (name) {
-    FILE_TYPES.some(function (type) {
+    return FILE_TYPES.some(function (type) {
       return name.endsWith(type);
     });
   };
 
-  var onImageChoose = function (chooser, index, image) {
+  var onImageChoose = function (chooser, index, image) { // переименовать
     chooser.addEventListener('change', function () {
       var file = chooser.files[index];
       var fileName = file.name.toLowerCase();

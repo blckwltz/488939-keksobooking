@@ -85,9 +85,9 @@
 
   onRoomsChange();
 
-  var noticeFilters = noticeForm.querySelectorAll('fieldset');
+  var noticeFormSelects = noticeForm.querySelectorAll('fieldset');
 
-  [].forEach.call(noticeFilters, function (filter) {
+  [].forEach.call(noticeFormSelects, function (filter) {
     filter.disabled = true;
   });
 
@@ -121,7 +121,7 @@
     form: noticeForm,
     address: noticeFormAddress,
     inputs: noticeFormInputs,
-    filters: noticeFilters,
+    selects: noticeFormSelects,
     onRoomsChange: function () {
       var options = [
         [2],
