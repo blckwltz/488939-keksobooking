@@ -53,6 +53,8 @@
       window.pin.removePins();
       window.pin.renderPins(filteredPins);
     };
+
+    mapPinMain.removeEventListener('mouseup', toActiveState);
   };
 
   mapPinMain.addEventListener('mouseup', toActiveState);
@@ -81,13 +83,21 @@
         select.disabled = true;
       });
 
+      [].forEach.call(window.form.features, function (feature) {
+        feature.checked = false;
+      });
+
       mapPinMain.style.left = MAIN_PIN_POSITION.x + 'px';
       mapPinMain.style.top = MAIN_PIN_POSITION.y + 'px';
       window.form.address.value = MAIN_PIN_POSITION.x + ', ' + MAIN_PIN_POSITION.y;
 
       window.pin.removePins();
 
+      window.form.rooms.value = 1;
+
       window.form.onRoomsChange();
+
+      map.addEventListener('mouseup', toActiveState);
     }
   };
 })();

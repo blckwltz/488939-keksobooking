@@ -32,24 +32,13 @@
         y: moveEvt.clientY
       };
 
-      if ((window.map.mainPin.offsetLeft - shift.x) < MAP_BORDERS.x.min) {
-        window.map.mainPin.style.left = MAP_BORDERS.x.min + 'px';
-      } else if ((window.map.mainPin.offsetLeft - shift.x) > MAP_BORDERS.x.max) {
-        window.map.mainPin.style.left = MAP_BORDERS.x.max + 'px';
-      } else {
-        window.map.mainPin.style.left = (window.map.mainPin.offsetLeft - shift.x) + 'px';
-      }
+      var x = Math.max(MAP_BORDERS.x.min, Math.min(window.map.mainPin.offsetLeft -
+        shift.x, MAP_BORDERS.x.max));
+      window.map.mainPin.style.left = x + 'px';
 
-      if ((window.map.mainPin.offsetTop - shift.y) < MAP_BORDERS.y.min) {
-        window.map.mainPin.style.top = MAP_BORDERS.y.min + 'px';
-      } else if ((window.map.mainPin.offsetTop - shift.y) > MAP_BORDERS.y.max) {
-        window.map.mainPin.style.top = MAP_BORDERS.y.max + 'px';
-      } else {
-        window.map.mainPin.style.top = (window.map.mainPin.offsetTop - shift.y) + 'px';
-      }
-
-      window.form.address.value = (window.map.mainPin.offsetLeft + window.util.POSITION_OFFSET.x) + ', '
-          + (window.map.mainPin.offsetTop + window.util.POSITION_OFFSET.y);
+      var y = Math.max(MAP_BORDERS.y.min, Math.min(window.map.mainPin.offsetTop -
+        shift.y, MAP_BORDERS.y.max));
+      window.map.mainPin.style.top = y + 'px';
     };
 
     var onMouseUp = function (upEvt) {
@@ -58,8 +47,6 @@
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
-
-    window.pin.removePins();
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);

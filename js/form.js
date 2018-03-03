@@ -96,7 +96,7 @@
 
   [].forEach.call(noticeFormInputs, function (input) {
     input.addEventListener('input', function () {
-      if (input.checkValidity() === true) {
+      if (input.checkValidity()) {
         input.style = 'outline: none';
       }
     });
@@ -106,7 +106,7 @@
 
   noticeFormSubmit.addEventListener('click', function () {
     [].forEach.call(noticeFormInputs, function (input) {
-      if (input.checkValidity() === false) {
+      if (!input.checkValidity()) {
         input.style = 'outline: thick double red';
       }
     });
@@ -121,8 +121,10 @@
   window.form = {
     form: noticeForm,
     address: noticeFormAddress,
+    rooms: noticeFormRoomNumber,
     inputs: noticeFormInputs,
     selects: noticeFormSelects,
+    features: noticeForm.querySelectorAll('[name="features"]'),
     onRoomsChange: function () {
       var allowedOptions = OPTIONS[noticeFormRoomNumber.selectedIndex];
       var defaultOption = allowedOptions[0];
