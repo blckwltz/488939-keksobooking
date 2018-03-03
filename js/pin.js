@@ -46,7 +46,6 @@
         var pin = window.map.pinsContainer.appendChild(renderPin(adverts[i]));
         currentCard = window.card.generateAdvertCard(adverts[i]);
         showCards(pin, currentCard);
-        console.log(currentCard);
       }
     },
     removePins: function () {
