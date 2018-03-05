@@ -58,7 +58,7 @@
       return filter.value;
     });
     return activeFeatures.every(function (feature) {
-      return advert.offer.features.includes(feature);
+      return window.util.includes(advert.offer.features, feature);
     });
   };
 

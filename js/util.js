@@ -7,6 +7,9 @@
       x: 32,
       y: 87
     },
+    includes: function (array, value) {
+      return array.indexOf(value) >= 0;
+    },
     renderErrorElement: function (errorMessage, element) {
       var errorElement = document.createElement('div');
       element.style.position = 'relative';

@@ -101,6 +101,10 @@
 
       window.form.onRoomsChange();
 
+      window.preview.resetAvatar();
+
+      window.preview.removePhotos();
+
       map.addEventListener('mouseup', toActiveState);
     }
   };

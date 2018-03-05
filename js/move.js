@@ -39,6 +39,9 @@
       var y = Math.max(MAP_BORDERS.y.min, Math.min(window.map.mainPin.offsetTop -
         shift.y, MAP_BORDERS.y.max));
       window.map.mainPin.style.top = y + 'px';
+
+      window.form.address.value = (window.map.mainPin.offsetLeft + window.util.POSITION_OFFSET.x) + ', '
+        + (window.map.mainPin.offsetTop + window.util.POSITION_OFFSET.y);
     };
 
     var onMouseUp = function (upEvt) {

@@ -78,7 +78,7 @@
     var defaultOption = allowedOptions[0];
     noticeFormCapacity[defaultOption].selected = true;
     [].forEach.call(noticeFormCapacity.options, function (option, index) {
-      option.hidden = !allowedOptions.includes(index);
+      option.hidden = !window.util.includes(allowedOptions, index);
     });
   };
 
@@ -124,6 +124,7 @@
     form: noticeForm,
     address: noticeFormAddress,
     type: noticeFormType,
+    time: noticeFormTimeIn,
     rooms: noticeFormRoomNumber,
     inputs: noticeFormInputs,
     selects: noticeFormSelects,
@@ -134,7 +135,7 @@
       var defaultOption = allowedOptions[0];
       noticeFormCapacity[defaultOption].selected = true;
       [].forEach.call(noticeFormCapacity.options, function (option, index) {
-        option.hidden = !allowedOptions.includes(index);
+        option.hidden = !window.util.includes(allowedOptions, index);
       });
     }
   };
