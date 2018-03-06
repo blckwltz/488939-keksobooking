@@ -3,13 +3,13 @@
 (function () {
   window.drag = {
     onItemDrag: function (evt) {
-      evt.dataTransfer.setData('text', evt.target.id);
-      evt.dataTransfer.effectAllowed = 'move';
+      evt.dataTransfer.setData('obj_id', this.id);
+      evt.dataTransfer.effectAllowed = 'copy';
     },
     onItemDrop: function (evt) {
       evt.preventDefault();
-      var data = evt.dataTransfer.getData('text');
-      evt.currentTarget.appendChild(document.querySelector('#' + data));
+      var data = evt.dataTransfer.getData('obj_id');
+      this.appendChild(document.querySelector('#' + data));
     }
   };
 })();

@@ -40,11 +40,15 @@
 
   var photosChooser = window.form.form.querySelector('#images');
 
-  var list = document.createElement('ul');
+  var list = document.createElement('div');
   list.style = 'width: 150px; padding: 5px 15px;' +
     ' margin-right: 10px; margin-top: 0; background-color: #dadada;' +
     ' border-radius: 5px; list-style: none';
   list.hidden = true;
+  list.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+  });
+  list.addEventListener('drop', window.drag.onItemDrop);
   var photosContainer = window.form.form.querySelector('.form__photo-container');
   var upload = photosContainer.querySelector('.upload');
 
@@ -53,14 +57,12 @@
 
     reader.addEventListener('load', function () {
 
-      var item = document.createElement('li');
       var img = document.createElement('img');
-      item.classList.add('form__photo');
+      img.classList.add('form__photo');
+      img.id = 'photo-' + (value + list.children.length + 1);
       img.width = 70;
       img.height = 70;
-      img.id = 'photo-' + (value + list.children.length + 1);
-      item.appendChild(img);
-      list.appendChild(item);
+      list.appendChild(img);
       list.hidden = false;
 
       var photoImage = photosContainer.querySelector('#photo-'
@@ -68,20 +70,11 @@
 
       photoImage.src = reader.result;
 
-      var photoImages = photosContainer.querySelectorAll('[id|="photo"]');
+      var photoImages = photosContainer.querySelectorAll('.form__photo');
 
       [].forEach.call(photoImages, function (image) {
         image.addEventListener('dragstart', window.drag.onItemDrag);
       });
-    });
-
-    var items = document.querySelectorAll('.form__photo');
-
-    [].forEach.call(items, function (it) {
-      it.addEventListener('dragover', function (evt) {
-        evt.preventDefault();
-      });
-      it.addEventListener('drop', window.drag.onItemDrop);
     });
 
     reader.readAsDataURL(element);
