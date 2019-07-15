@@ -3,29 +3,27 @@
 (function () {
   window.util = {
     ESC_KEYCODE: 27,
-    getRandomNumber: function (min, max) {
-      return Math.floor(Math.random() * (max - min) + min);
+    POSITION_OFFSET: {
+      x: 32,
+      y: 87
     },
-    getRandomElement: function (array) {
-      return array[window.util.getRandomNumber(0, array.length)];
+    includes: function (array, value) {
+      return array.indexOf(value) >= 0;
     },
-    randomSeed: function () {
-      return Math.random() - 0.5;
-    },
-    renderErrorNode: function (errorMessage, node) {
-      var errorNode = document.createElement('div');
-      node.style.position = 'relative';
-      errorNode.textContent = errorMessage;
-      errorNode.style = 'position: absolute; z-index: 10; width: 500px;' +
+    renderErrorElement: function (errorMessage, element) {
+      var errorElement = document.createElement('div');
+      element.style.position = 'relative';
+      errorElement.textContent = errorMessage;
+      errorElement.style = 'position: absolute; z-index: 10; width: 500px;' +
         ' top: 50%; left: 50%; margin-left: -250px; margin-top:' +
         ' -100px; font-size: 25px;' +
         ' text-align: center; background-color:' +
         ' rgba(180, 180, 180, 0.8); color:' +
         ' #ff5635; border-radius: 4px;';
-      node.appendChild(errorNode);
+      element.appendChild(errorElement);
       document.addEventListener('keydown', function (evt) {
         if (evt.keyCode === 27) {
-          errorNode.classList.add('hidden');
+          errorElement.classList.add('hidden');
         }
       });
     }
